@@ -52,13 +52,12 @@ public class WalkingService extends Service {
         }
     }
 
-    public void initAndStartWalk(WalkingServiceListener listener, GoogleApiClient.OnConnectionFailedListener onConnectionFailedListener){
+    public void initCallbacks(WalkingServiceListener listener, GoogleApiClient.OnConnectionFailedListener onConnectionFailedListener){
         mWalkingServiceListener = listener;
         mOnConnectionFailedListener = onConnectionFailedListener;
-        startWalk();
     }
 
-    private void startWalk() {
+    public void startWalk() {
         buildFitnessClient();
     }
         // [START auth_build_googleapiclient_beginning]
@@ -103,6 +102,7 @@ public class WalkingService extends Service {
                         .addOnConnectionFailedListener(mOnConnectionFailedListener)
                         .build();
             }
+            mClient.connect();
         }
         // [END auth_build_googleapiclient_beginning]
 

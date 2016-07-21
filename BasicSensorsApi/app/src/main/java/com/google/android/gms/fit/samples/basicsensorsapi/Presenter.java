@@ -1,7 +1,6 @@
 package com.google.android.gms.fit.samples.basicsensorsapi;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +16,7 @@ import com.google.android.gms.fit.samples.common.logger.Log;
  *
  */
 public class Presenter implements ActivityPresenterContract.Presenter, WalkingServiceListener, GoogleApiClient.OnConnectionFailedListener {
+    public static final int GOOGLE_FIT_CONNECT_CODE = 2011;
     private WalkingService mWalkingService;
     private final String TAG = Presenter.class.getSimpleName();
     private ActivityPresenterContract.View mView;
@@ -27,7 +27,8 @@ public class Presenter implements ActivityPresenterContract.Presenter, WalkingSe
             if(service != null){
                 WalkingService.WalkingServiceBinder binder = (WalkingService.WalkingServiceBinder) service;
                 mWalkingService = binder.getService();
-                mWalkingService.initAndStartWalk(Presenter.this, Presenter.this);
+                mWalkingService.initCallbacks(Presenter.this, Presenter.this);
+                mWalkingService.startWalk();
             }
         }
 
@@ -47,6 +48,14 @@ public class Presenter implements ActivityPresenterContract.Presenter, WalkingSe
         activity.getApplication().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
+    @Override
+    public void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == GOOGLE_FIT_CONNECT_CODE){
+            if(resultCode == Activity.RESULT_OK){
+                mWalkingService.startWalk();
+            }
+        }
+    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

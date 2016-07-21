@@ -15,6 +15,7 @@
  */
 package com.google.android.gms.fit.samples.basicsensorsapi;
 
+import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -41,7 +42,6 @@ import com.google.android.gms.fit.samples.common.logger.MessageOnlyLogFilter;
  */
 public class MainActivity extends AppCompatActivity implements ActivityPresenterContract.View {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int GOOGLE_FIT_CONNECT_CODE = 2011;
     // [START auth_variable_references]
     private GoogleApiClient mClient = null;
     // [END auth_variable_references]
@@ -143,10 +143,15 @@ public class MainActivity extends AppCompatActivity implements ActivityPresenter
     @Override
     public void connectionToFitFailed(ConnectionResult connectionResult) {
         try {
-            connectionResult.startResolutionForResult(this, GOOGLE_FIT_CONNECT_CODE);
+            connectionResult.startResolutionForResult(this, Presenter.GOOGLE_FIT_CONNECT_CODE);
         } catch (IntentSender.SendIntentException e) {
             Log.e(TAG, "Exception while trying to resolve google fit connection");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mPresenter.handleOnActivityResult(requestCode, resultCode, data);
     }
 }

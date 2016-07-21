@@ -1,6 +1,7 @@
 package com.google.android.gms.fit.samples.basicsensorsapi;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.google.android.gms.common.ConnectionResult;
 
@@ -16,6 +17,7 @@ public interface ActivityPresenterContract {
 
     interface Presenter {
         void startTrackingDistance(Activity activity);
+        void handleOnActivityResult(int requestCode, int resultCode, Intent data);
     }
 
 }
