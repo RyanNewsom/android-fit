@@ -15,6 +15,7 @@
  */
 package com.google.android.gms.fit.samples.basicsensorsapi;
 
+import android.content.IntentSender;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.fit.samples.common.logger.Log;
 import com.google.android.gms.fit.samples.common.logger.LogView;
@@ -38,7 +40,8 @@ import com.google.android.gms.fit.samples.common.logger.MessageOnlyLogFilter;
  * demonstrates how to authenticate a user with Google Play Services.
  */
 public class MainActivity extends AppCompatActivity implements ActivityPresenterContract.View {
-    public static final String TAG = "BasicSensorsApi";
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int GOOGLE_FIT_CONNECT_CODE = 2011;
     // [START auth_variable_references]
     private GoogleApiClient mClient = null;
     // [END auth_variable_references]
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements ActivityPresenter
 
         // When permissions are revoked the app is restarted so onCreate is sufficient to check for
         // permissions core to the Activity's functionality.
-        mPresenter = new Presenter();
+        mPresenter = new Presenter(this);
     }
 
     private void initViews() {
@@ -134,6 +137,16 @@ public class MainActivity extends AppCompatActivity implements ActivityPresenter
         Log.i(TAG, "New total distance: " + distanceTotal);
         if(mTotalDistanceTextView != null){
             mTotalDistanceTextView.setText(Double.toString(distanceTotal));
+        }
+    }
+
+    @Override
+    public void connectionToFitFailed(ConnectionResult connectionResult) {
+        try {
+            connectionResult.startResolutionForResult(this, GOOGLE_FIT_CONNECT_CODE);
+        } catch (IntentSender.SendIntentException e) {
+            Log.e(TAG, "Exception while trying to resolve google fit connection");
+            e.printStackTrace();
         }
     }
 }

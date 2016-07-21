@@ -75,7 +75,8 @@ public class WalkingService extends Service {
             if (mClient == null) {
                 mClient = new GoogleApiClient.Builder(this)
                         .addApi(Fitness.SENSORS_API)
-                        .addScope(new Scope(Scopes.FITNESS_LOCATION_READ))
+                        .addScope(new Scope(Scopes.FITNESS_LOCATION_READ_WRITE))
+                        .addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
                         .addConnectionCallbacks(
                                 new GoogleApiClient.ConnectionCallbacks() {
                                     @Override

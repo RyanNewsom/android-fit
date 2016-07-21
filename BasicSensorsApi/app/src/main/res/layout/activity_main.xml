@@ -36,7 +36,7 @@ limitations under the License.
         android:text="0"
         android:id="@+id/total_distance_text_view"
         android:layout_toRightOf="@+id/distance_label"
-        android:paddingLeft="5dp dp" />
+        android:paddingLeft="5dp" />
 
     <ScrollView
         android:layout_width="fill_parent"
