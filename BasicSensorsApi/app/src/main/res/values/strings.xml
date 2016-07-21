@@ -24,4 +24,5 @@ limitations under the License.
         functionality.</string>
     <string name="settings">Settings</string>
     <string name="ok">OK</string>
+    <string name="disabled">This feature his been disabled</string>
 </resources>
