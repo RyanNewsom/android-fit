@@ -126,22 +126,32 @@ public class WalkingService extends Service {
                 .setResultCallback(new ResultCallback<DataSourcesResult>() {
                     @Override
                     public void onResult(DataSourcesResult dataSourcesResult) {
-                        Log.i(TAG, "Result: " + dataSourcesResult.getStatus().toString());
-                        for (DataSource dataSource : dataSourcesResult.getDataSources()) {
-                            Log.i(TAG, "Data source found: " + dataSource.toString());
-                            Log.i(TAG, "Data Source type: " + dataSource.getDataType().getName());
-
-                            //Let's register a listener to receive Activity data!
-                            if (dataSource.getDataType().equals(DataType.TYPE_DISTANCE_DELTA)
-                                    && mOnDataPointListener == null) {
-                                Log.i(TAG, "Data source for Distance found!  Registering.");
-                                registerFitnessDataListener(dataSource,
-                                        DataType.TYPE_DISTANCE_DELTA);
-                            }
-                        }
+                        processDataSourcesResult(dataSourcesResult);
                     }
                 });
         // [END find_data_sources]
+    }
+
+    /**
+     * Process data sources result. We only use live distance from steps.
+     *
+     * @param dataSourcesResult the data sources result
+     */
+    protected void processDataSourcesResult(DataSourcesResult dataSourcesResult){
+        Log.i(TAG, "Result: " + dataSourcesResult.getStatus().toString());
+        for (int i = 0; i < dataSourcesResult.getDataSources().size(); i++){
+            DataSource dataSource = dataSourcesResult.getDataSources().get(i);
+            String dataType = dataSource.toString();
+            Log.i(TAG, "Data source found: " + dataSource.toString());
+            Log.i(TAG, "Data Source type: " + dataSource.getDataType().getName());
+
+            if(dataSource.getDataType().equals(DataType.TYPE_DISTANCE_DELTA) && dataType != null && dataType.contains("live_distance_from_steps")) {
+                //Let's register a listener to receive Activity data!
+                Log.i(TAG, "Distance From Steps Data Source Found");
+                Log.i(TAG, "Data source for STEPS DISTANCE found!  Registering.");
+                registerFitnessDataListener(dataSource, DataType.TYPE_DISTANCE_DELTA);
+            }
+        }
     }
 
     /**

@@ -133,10 +133,15 @@ public class MainActivity extends AppCompatActivity implements ActivityPresenter
     }
 
     @Override
-    public void updateDistance(double distanceTotal) {
+    public void updateDistance(final double distanceTotal) {
         Log.i(TAG, "New total distance: " + distanceTotal);
         if(mTotalDistanceTextView != null){
-            mTotalDistanceTextView.setText(Double.toString(distanceTotal));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mTotalDistanceTextView.setText(Double.toString(distanceTotal));
+                }
+            });
         }
     }
 
