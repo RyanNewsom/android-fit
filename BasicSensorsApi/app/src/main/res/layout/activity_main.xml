@@ -42,7 +42,7 @@ limitations under the License.
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/scrollView"
-        android:layout_below="@+id/distance_label">
+        android:layout_below="@+id/start_tracking_button">
         <com.google.android.gms.fit.samples.common.logger.LogView
             android:id="@+id/sample_logview"
             android:layout_width="wrap_content"
@@ -55,7 +55,17 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:text="Start Tracking"
         android:id="@+id/start_tracking_button"
-        android:layout_alignBottom="@+id/scrollView"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/distance_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Tracking"
+        android:id="@+id/stop_tracking_button"
+        android:layout_below="@+id/total_distance_text_view"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
 

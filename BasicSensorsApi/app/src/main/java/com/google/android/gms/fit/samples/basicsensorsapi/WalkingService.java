@@ -57,8 +57,12 @@ public class WalkingService extends Service {
         mOnConnectionFailedListener = onConnectionFailedListener;
     }
 
-    public void startWalk() {
+    public void startTracking() {
         buildFitnessClient();
+    }
+
+    public void stopTracking() {
+        unregisterFitnessDataListener();
     }
         // [START auth_build_googleapiclient_beginning]
         /**

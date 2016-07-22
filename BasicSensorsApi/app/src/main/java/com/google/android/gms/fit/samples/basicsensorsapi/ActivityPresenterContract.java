@@ -17,6 +17,7 @@ public interface ActivityPresenterContract {
 
     interface Presenter {
         void startTrackingDistance(Activity activity);
+        void stopTrackingDistance();
         void handleOnActivityResult(int requestCode, int resultCode, Intent data);
     }
 

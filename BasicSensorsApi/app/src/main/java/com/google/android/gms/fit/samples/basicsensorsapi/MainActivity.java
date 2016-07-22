@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements ActivityPresenter
 
     // [START view_references]
     private Button mStartTrackingButton;
+    private Button mStopTrckingButton;
     private TextView mTotalDistanceTextView;
 
 
@@ -81,6 +82,13 @@ public class MainActivity extends AppCompatActivity implements ActivityPresenter
             @Override
             public void onClick(View v) {
                 mPresenter.startTrackingDistance(MainActivity.this);
+            }
+        });
+        mStopTrckingButton = (Button) findViewById(R.id.stop_tracking_button);
+        mStopTrckingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.stopTrackingDistance();
             }
         });
         mTotalDistanceTextView = (TextView) findViewById(R.id.total_distance_text_view);

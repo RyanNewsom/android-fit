@@ -28,7 +28,7 @@ public class Presenter implements ActivityPresenterContract.Presenter, WalkingSe
                 WalkingService.WalkingServiceBinder binder = (WalkingService.WalkingServiceBinder) service;
                 mWalkingService = binder.getService();
                 mWalkingService.initCallbacks(Presenter.this, Presenter.this);
-                mWalkingService.startWalk();
+                mWalkingService.startTracking();
             }
         }
 
@@ -49,10 +49,17 @@ public class Presenter implements ActivityPresenterContract.Presenter, WalkingSe
     }
 
     @Override
+    public void stopTrackingDistance() {
+        if(mWalkingService != null){
+            mWalkingService.stopTracking();
+        }
+    }
+
+    @Override
     public void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == GOOGLE_FIT_CONNECT_CODE){
             if(resultCode == Activity.RESULT_OK){
-                mWalkingService.startWalk();
+                mWalkingService.startTracking();
             }
         }
     }
