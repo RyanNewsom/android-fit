@@ -58,6 +58,7 @@ public class WalkingService extends Service {
     }
 
     public void startTracking() {
+        Log.i(TAG, "startTracking()");
         buildFitnessClient();
     }
 
@@ -106,7 +107,10 @@ public class WalkingService extends Service {
                         .addOnConnectionFailedListener(mOnConnectionFailedListener)
                         .build();
             }
-            mClient.connect();
+
+            if(!mClient.isConnected()) {
+                mClient.connect();
+            }
         }
         // [END auth_build_googleapiclient_beginning]
 
@@ -143,13 +147,15 @@ public class WalkingService extends Service {
      */
     protected void processDataSourcesResult(DataSourcesResult dataSourcesResult){
         Log.i(TAG, "Result: " + dataSourcesResult.getStatus().toString());
+        final String DATA_SOURCE_TYPE = "live_distance_from_location";
         for (int i = 0; i < dataSourcesResult.getDataSources().size(); i++){
             DataSource dataSource = dataSourcesResult.getDataSources().get(i);
             String dataType = dataSource.toString();
             Log.i(TAG, "Data source found: " + dataSource.toString());
             Log.i(TAG, "Data Source type: " + dataSource.getDataType().getName());
 
-            if(dataSource.getDataType().equals(DataType.TYPE_DISTANCE_DELTA) && dataType != null && dataType.contains("live_distance_from_steps")) {
+            // we use live distance from steps because we know the pitfalls of using anything derived from GPS
+            if(dataSource.getDataType().equals(DataType.TYPE_DISTANCE_DELTA) && dataType != null && dataType.contains(DATA_SOURCE_TYPE)) {
                 //Let's register a listener to receive Activity data!
                 Log.i(TAG, "Distance From Steps Data Source Found");
                 Log.i(TAG, "Data source for STEPS DISTANCE found!  Registering.");

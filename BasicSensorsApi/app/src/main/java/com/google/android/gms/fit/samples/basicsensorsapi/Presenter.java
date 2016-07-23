@@ -13,7 +13,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.fit.samples.common.logger.Log;
 
 /**
- *
+ * The presenter handles everything that the activity/fragment needs. All communication is done through
+ * an interface.
  */
 public class Presenter implements ActivityPresenterContract.Presenter, WalkingServiceListener, GoogleApiClient.OnConnectionFailedListener {
     public static final int GOOGLE_FIT_CONNECT_CODE = 2011;
@@ -21,6 +22,9 @@ public class Presenter implements ActivityPresenterContract.Presenter, WalkingSe
     private final String TAG = Presenter.class.getSimpleName();
     private ActivityPresenterContract.View mView;
 
+    /**
+     * The connection for binding to the service
+     */
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -38,17 +42,34 @@ public class Presenter implements ActivityPresenterContract.Presenter, WalkingSe
         }
     };
 
+    /**
+     * Constructor
+     * Makes a new Presenter to handle all things for the view
+     * @param view - anything that wants to present
+     */
     public Presenter(ActivityPresenterContract.View view) {
         mView = view;
     }
 
     @Override
+    /**
+     * Begins tracking distance. Start the service & hook up to Google Fit Sensor's API
+     */
     public void startTrackingDistance(Activity activity) {
-        Intent intent = new Intent(activity, WalkingService.class);
-        activity.getApplication().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        Intent startService = null;
+        //create the service and start tracking distance
+        if(mWalkingService == null) {
+            startService = new Intent(activity, WalkingService.class);
+            activity.getApplication().bindService(startService, mConnection, Context.BIND_AUTO_CREATE);
+        } else{
+            mWalkingService.startTracking();
+        }
     }
 
     @Override
+    /**
+     * Stop tracking distance.
+     */
     public void stopTrackingDistance() {
         if(mWalkingService != null){
             mWalkingService.stopTracking();
@@ -56,6 +77,9 @@ public class Presenter implements ActivityPresenterContract.Presenter, WalkingSe
     }
 
     @Override
+    /**
+     * Handle the Activity result code for the View
+     */
     public void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == GOOGLE_FIT_CONNECT_CODE){
             if(resultCode == Activity.RESULT_OK){
@@ -75,6 +99,9 @@ public class Presenter implements ActivityPresenterContract.Presenter, WalkingSe
     }
 
     @Override
+    /**
+     * The total distance we that has been traveled has been updated, notify the View
+     */
     public void onTotalDistanceUpdated(double newTotal) {
         mView.updateDistance(newTotal);
     }
