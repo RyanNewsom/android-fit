@@ -147,7 +147,7 @@ public class WalkingService extends Service {
      */
     protected void processDataSourcesResult(DataSourcesResult dataSourcesResult){
         Log.i(TAG, "Result: " + dataSourcesResult.getStatus().toString());
-        final String DATA_SOURCE_TYPE = "live_distance_from_location";
+        final String DATA_SOURCE_TYPE = "live_distance_from_steps";
         for (int i = 0; i < dataSourcesResult.getDataSources().size(); i++){
             DataSource dataSource = dataSourcesResult.getDataSources().get(i);
             String dataType = dataSource.toString();
